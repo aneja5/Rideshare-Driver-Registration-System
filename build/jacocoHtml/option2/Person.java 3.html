@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Person.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">Person.java</span></div><h1>Person.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.time.LocalDate;
+import java.util.Objects;
+
+/**
+ * Represents a person with a first name, last name, and optional date of birth.
+ */
+public class Person {
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
+
+    /**
+     * Constructs a person with the given first name and last name.
+     *
+     * @param firstName The first name of the person.
+     * @param lastName  The last name of the person.
+     */
+<span class="fc" id="L20">    public Person(String firstName, String lastName) {</span>
+<span class="fc" id="L21">        this.firstName = firstName;</span>
+<span class="fc" id="L22">        this.lastName = lastName;</span>
+<span class="fc" id="L23">    }</span>
+
+    /**
+     * Constructs a person with the given first name, last name, and date of birth.
+     *
+     * @param firstName   The first name of the person.
+     * @param lastName    The last name of the person.
+     * @param dateOfBirth The date of birth of the person.
+     */
+<span class="fc" id="L32">    public Person(String firstName, String lastName, LocalDate dateOfBirth) {</span>
+<span class="fc" id="L33">        this.firstName = firstName;</span>
+<span class="fc" id="L34">        this.lastName = lastName;</span>
+<span class="fc" id="L35">        this.dateOfBirth = dateOfBirth;</span>
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Gets the first name of the person.
+     *
+     * @return The first name of the person.
+     */
+    public String getFirstName() {
+<span class="nc" id="L44">        return firstName;</span>
+    }
+
+    /**
+     * Gets the last name of the person.
+     *
+     * @return The last name of the person.
+     */
+    public String getLastName() {
+<span class="nc" id="L53">        return lastName;</span>
+    }
+
+    /**
+     * Gets the date of birth of the person.
+     *
+     * @return The date of birth of the person, or null if not set.
+     */
+    public LocalDate getDateOfBirth() {
+<span class="nc" id="L62">        return dateOfBirth;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L68" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L69">        Person person = (Person) o;</span>
+<span class="pc bpc" id="L70" title="2 of 6 branches missed.">        return Objects.equals(firstName, person.firstName) &amp;&amp; Objects.equals(lastName, person.lastName) &amp;&amp; Objects.equals(dateOfBirth, person.dateOfBirth);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L75">        return Objects.hash(firstName, lastName, dateOfBirth);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L80">        return &quot;Person{&quot; +</span>
+                &quot;firstName='&quot; + firstName + '\'' +
+                &quot;, lastName='&quot; + lastName + '\'' +
+                &quot;, dateOfBirth=&quot; + dateOfBirth +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

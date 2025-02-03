@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ViolationType.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">ViolationType.java</span></div><h1>ViolationType.java</h1><pre class="source lang-java linenums">package option2;
+
+/**
+ * Enum representing different types of violations.
+ */
+<span class="fc" id="L6">public enum ViolationType {</span>
+<span class="fc" id="L7">    MOVING_VIOLATION,</span>
+<span class="fc" id="L8">    NON_MOVING_VIOLATION, SPEEDING;</span>
+
+    /**
+     * Enum representing various types of moving violations.
+     */
+<span class="nc" id="L13">    public enum MovingViolation {</span>
+<span class="nc" id="L14">        DISTRACTED_DRIVING,</span>
+<span class="nc" id="L15">        RECKLESS_DRIVING,</span>
+<span class="nc" id="L16">        SPEEDING,</span>
+<span class="nc" id="L17">        DUI,</span>
+<span class="nc" id="L18">        TRAFFIC_SIGN,</span>
+<span class="nc" id="L19">        INVALID_LICENSE_INSURANCE;</span>
+    }
+
+    /**
+     * Enum representing various types of non-moving violations.
+     */
+<span class="nc" id="L25">    public enum NonMovingViolation {</span>
+<span class="nc" id="L26">        PARKING,</span>
+<span class="nc" id="L27">        PAPERWORK,</span>
+<span class="nc" id="L28">        VEHICLE_ISSUE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

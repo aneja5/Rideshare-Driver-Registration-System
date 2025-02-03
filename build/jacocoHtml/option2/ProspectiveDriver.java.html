@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProspectiveDriver.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">ProspectiveDriver.java</span></div><h1>ProspectiveDriver.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * Represents a prospective driver with a person's information, driver's license, vehicles, and driver history.
+ */
+public class ProspectiveDriver {
+    private Person name;
+    private DriversLicense license;
+    private List&lt;Vehicle&gt; vehicles;
+    private List&lt;DriverHistory&gt; driverHistory;
+
+    /**
+     * Constructs a ProspectiveDriver with the given person's information and driver's license.
+     *
+     * @param name The person's information.
+     * @param license The driver's license.
+     */
+<span class="fc" id="L22">    public ProspectiveDriver(Person name, DriversLicense license) {</span>
+<span class="fc" id="L23">        this.name = name;</span>
+<span class="fc" id="L24">        this.license = license;</span>
+<span class="fc" id="L25">        this.vehicles = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L26">        this.driverHistory = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L27">    }</span>
+
+    /**
+     * Gets the person's information.
+     *
+     * @return The person's information.
+     */
+    public Person getName() {
+<span class="fc" id="L35">        return name;</span>
+    }
+
+    /**
+     * Gets the driver's license.
+     *
+     * @return The driver's license.
+     */
+    public DriversLicense getLicense() {
+<span class="fc" id="L44">        return license;</span>
+    }
+
+    /**
+     * Gets the list of vehicles associated with this prospective driver.
+     *
+     * @return The list of vehicles.
+     */
+    public List&lt;Vehicle&gt; getVehicles() {
+<span class="fc" id="L53">        return vehicles;</span>
+    }
+
+    /**
+     * Gets the driver history of this prospective driver.
+     *
+     * @return The list of driver history records.
+     */
+    public List&lt;DriverHistory&gt; getDriverHistory() {
+<span class="fc" id="L62">        return driverHistory;</span>
+    }
+
+    /**
+     * Adds a driver history record for this prospective driver.
+     *
+     * @param history The driver history record to add.
+     */
+    public void addDriverHistory(DriverHistory history) {
+<span class="fc" id="L71">        driverHistory.add(history);</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Adds a vehicle to the list of vehicles associated with this prospective driver.
+     *
+     * @param vehicle The vehicle to add.
+     */
+    public void addVehicle(Vehicle vehicle) {
+<span class="fc" id="L80">        vehicles.add(vehicle);</span>
+<span class="fc" id="L81">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L86" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L87">        ProspectiveDriver that = (ProspectiveDriver) o;</span>
+<span class="pc bpc" id="L88" title="4 of 8 branches missed.">        return Objects.equals(name, that.name) &amp;&amp; Objects.equals(license, that.license) &amp;&amp; Objects.equals(vehicles, that.vehicles) &amp;&amp; Objects.equals(driverHistory, that.driverHistory);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L93">        return Objects.hash(name, license, vehicles, driverHistory);</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L98">        return &quot;ProspectiveDriver{&quot; +</span>
+                &quot;name=&quot; + name +
+                &quot;, license=&quot; + license +
+                &quot;, vehicles=&quot; + vehicles +
+                &quot;, driverHistory=&quot; + driverHistory +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

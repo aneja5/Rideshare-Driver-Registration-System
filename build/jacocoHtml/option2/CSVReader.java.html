@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CSVReader.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">CSVReader.java</span></div><h1>CSVReader.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * A utility class to read prospective driver data from a CSV file.
+ */
+public class CSVReader {
+
+    private String filePath;
+
+    /**
+     * Constructs a CSVReader with the specified file path.
+     *
+     * @param filePath The path to the CSV file.
+     */
+<span class="nc" id="L25">    public CSVReader(String filePath) {</span>
+<span class="nc" id="L26">        this.filePath = filePath;</span>
+<span class="nc" id="L27">    }</span>
+
+    /**
+     * Reads prospective driver data from the specified CSV file.
+     *
+     * @param filePath The path to the CSV file.
+     * @return A list of prospective drivers read from the CSV file.
+     */
+    public static List&lt;ProspectiveDriver&gt; readProspectiveDriversFromCSV(String filePath) {
+<span class="nc" id="L36">        List&lt;ProspectiveDriver&gt; prospectiveDrivers = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L38">        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {</span>
+            String line;
+<span class="nc" id="L40">            boolean isHeaderRow = true;</span>
+
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            while ((line = br.readLine()) != null) {</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if (isHeaderRow) {</span>
+<span class="nc" id="L44">                    isHeaderRow = false;</span>
+<span class="nc" id="L45">                    continue;</span>
+                }
+
+<span class="nc" id="L48">                String[] values = line.split(&quot;,&quot;);</span>
+<span class="nc" id="L49">                String firstName = values[0];</span>
+<span class="nc" id="L50">                String lastName = values[1];</span>
+<span class="nc" id="L51">                LocalDate dateOfBirth = parseDate(values[2]);</span>
+<span class="nc" id="L52">                Person driverInfo = new Person(firstName, lastName, dateOfBirth);</span>
+<span class="nc" id="L53">                Person driverName = new Person(firstName, lastName);</span>
+
+<span class="nc" id="L55">                String licenseFirstName = values[3];</span>
+<span class="nc" id="L56">                String licenseLastName = values[4];</span>
+<span class="nc" id="L57">                LocalDate licenseDateOfBirth = parseDate(values[5]);</span>
+<span class="nc" id="L58">                String licenseNumber = values[6];</span>
+<span class="nc" id="L59">                String streetAddress = values[7];</span>
+<span class="nc" id="L60">                String city = values[8];</span>
+<span class="nc" id="L61">                String state = values[9];</span>
+<span class="nc" id="L62">                String zipcode = values[10];</span>
+<span class="nc" id="L63">                Address address = new Address(streetAddress, city, state, zipcode);</span>
+<span class="nc" id="L64">                String countryOfIssuance = values[11];</span>
+<span class="nc" id="L65">                String stateOfIssuance = values[12];</span>
+<span class="nc" id="L66">                LocalDate issuanceDate = parseDate(values[13]);</span>
+<span class="nc" id="L67">                LocalDate expirationDate = parseDate(values[14]);</span>
+<span class="nc" id="L68">                Person driverNameOnLicense = new Person(licenseFirstName, licenseLastName);</span>
+<span class="nc" id="L69">                DriversLicense license = new DriversLicense(driverNameOnLicense, licenseDateOfBirth, licenseNumber, address,</span>
+                        countryOfIssuance, stateOfIssuance, issuanceDate, expirationDate);
+
+<span class="nc" id="L72">                String vehicleMake = values[15];</span>
+<span class="nc" id="L73">                String vehicleModel = values[16];</span>
+<span class="nc" id="L74">                int vehicleYear = Integer.parseInt(values[17]);</span>
+<span class="nc" id="L75">                String vehicleColor = values[18];</span>
+<span class="nc" id="L76">                String vehicleLicensePlateNumber = values[19];</span>
+<span class="nc" id="L77">                String vehicleOwnerFirstName = values[20];</span>
+<span class="nc" id="L78">                String vehicleOwnerLastName = values[21];</span>
+<span class="nc" id="L79">                Person vehicleOwner = new Person(vehicleOwnerFirstName, vehicleOwnerLastName);</span>
+<span class="nc" id="L80">                Vehicle vehicle = new Vehicle(vehicleMake, vehicleModel, vehicleYear, vehicleColor, vehicleLicensePlateNumber, vehicleOwner);</span>
+
+<span class="nc" id="L82">                String insuranceOwnerFirstName = values[22];</span>
+<span class="nc" id="L83">                String insuranceOwnerLastName = values[23];</span>
+<span class="nc" id="L84">                Person insuranceOwner = new Person(insuranceOwnerFirstName, insuranceOwnerLastName);</span>
+<span class="nc" id="L85">                LocalDate insuranceExpirationDate = parseDate(values[24]);</span>
+
+<span class="nc" id="L87">                String additionalDriversString = values[25];</span>
+<span class="nc" id="L88">                Person[] additionalDrivers = null;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">                if (!additionalDriversString.isEmpty()) {</span>
+<span class="nc" id="L90">                    String[] additionalDriverNames = additionalDriversString.split(&quot;/&quot;);</span>
+<span class="nc" id="L91">                    int numAdditionalDrivers = additionalDriverNames.length / 2 + (additionalDriverNames.length % 2);</span>
+<span class="nc" id="L92">                    additionalDrivers = new Person[numAdditionalDrivers];</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                    for (int i = 0, j = 0; i &lt; additionalDriverNames.length; i += 2, j++) {</span>
+<span class="nc" id="L94">                        String additionalDriverFirstName = additionalDriverNames[i];</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                        String additionalDriverLastName = (i + 1 &lt; additionalDriverNames.length) ? additionalDriverNames[i + 1] : &quot;&quot;;</span>
+<span class="nc" id="L96">                        additionalDrivers[j] = new Person(additionalDriverFirstName, additionalDriverLastName);</span>
+                    }
+                }
+
+<span class="nc" id="L100">                Insurance insurance = new Insurance(insuranceOwner, additionalDrivers, insuranceExpirationDate);</span>
+<span class="nc" id="L101">                vehicle.setInsurance(insurance);</span>
+
+<span class="nc" id="L103">                LocalDate vehicleIncidentDate = parseDate(values[26]);</span>
+<span class="nc" id="L104">                String vehicleIncidentDriverFirstName = values[27];</span>
+<span class="nc" id="L105">                String vehicleIncidentDriverLastName = values[28];</span>
+<span class="nc" id="L106">                Person vehicleIncidentDriver = new Person(vehicleIncidentDriverFirstName, vehicleIncidentDriverLastName);</span>
+<span class="nc" id="L107">                int vehicleIncidentType = -1;</span>
+                try {
+<span class="nc" id="L109">                    vehicleIncidentType = Integer.parseInt(values[29]);</span>
+<span class="nc" id="L110">                } catch (NumberFormatException e) {</span>
+                    // Handle the case where the string is not a valid integer
+<span class="nc" id="L112">                }</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                if (vehicleIncidentType == 1) {</span>
+<span class="nc" id="L115">                    CrashType crashType = CrashType.valueOf(values[30]);</span>
+<span class="nc" id="L116">                    vehicle.addVehicleHistory(new VehicleHistory(vehicleIncidentDate, vehicleIncidentDriver, null, crashType));</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                } else if (vehicleIncidentType == 2) {</span>
+<span class="nc" id="L118">                    ViolationType violationType = ViolationType.valueOf(values[31]);</span>
+<span class="nc" id="L119">                    vehicle.addVehicleHistory(new VehicleHistory(vehicleIncidentDate, vehicleIncidentDriver, violationType, null));</span>
+                }
+
+<span class="nc" id="L122">                ProspectiveDriver prospectiveDriver = new ProspectiveDriver(driverInfo, license);</span>
+<span class="nc" id="L123">                prospectiveDriver.addVehicle(vehicle);</span>
+
+<span class="nc" id="L125">                LocalDate driverViolationDate = LocalDate.MIN;</span>
+<span class="nc" id="L126">                ViolationType driverViolationType = null;</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                if (values.length &gt; 32) {</span>
+<span class="nc" id="L129">                    driverViolationDate = parseDate(values[32]);</span>
+<span class="nc bnc" id="L130" title="All 4 branches missed.">                    if (!driverViolationDate.equals(LocalDate.MIN) &amp;&amp; values.length &gt; 33) {</span>
+<span class="nc" id="L131">                        driverViolationType = ViolationType.valueOf(values[33]);</span>
+                    }
+                }
+
+<span class="nc bnc" id="L135" title="All 4 branches missed.">                if (!driverViolationDate.equals(LocalDate.MIN) &amp;&amp; driverViolationType != null) {</span>
+<span class="nc" id="L136">                    prospectiveDriver.addDriverHistory(new DriverHistory(driverViolationDate, driverViolationType));</span>
+                }
+<span class="nc" id="L138">                prospectiveDrivers.add(prospectiveDriver);</span>
+<span class="nc" id="L139">            }</span>
+<span class="nc" id="L140">        } catch (IOException e) {</span>
+<span class="nc" id="L141">            e.printStackTrace();</span>
+<span class="nc" id="L142">        }</span>
+
+<span class="nc" id="L144">        return prospectiveDrivers;</span>
+    }
+
+    /**
+     * Parses a date string into a LocalDate object.
+     *
+     * @param dateString The date string to parse.
+     * @return The LocalDate object parsed from the string, or LocalDate.MIN if the string is empty or not in the correct format.
+     */
+
+    private static LocalDate parseDate(String dateString) {
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (dateString.isEmpty()) {</span>
+<span class="nc" id="L156">            return LocalDate.MIN;</span>
+        }
+        try {
+<span class="nc" id="L159">            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(&quot;yyyy-MM-dd&quot;);</span>
+<span class="nc" id="L160">            return LocalDate.parse(dateString, formatter);</span>
+<span class="nc" id="L161">        } catch (DateTimeParseException e) {</span>
+            // Handle the case where the string is not a valid date
+<span class="nc" id="L163">            return LocalDate.MIN;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

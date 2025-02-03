@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="option2.InsuranceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-08-27T19:37:33" hostname="Sahilpreets-MacBook-Air.local" time="0.027">
+  <properties/>
+  <testcase name="isDriverAndOwnerSame()" classname="option2.InsuranceTest" time="0.015"/>
+  <testcase name="getExpirationDate()" classname="option2.InsuranceTest" time="0.002"/>
+  <testcase name="isDriverInAdditionalDriversList()" classname="option2.InsuranceTest" time="0.0"/>
+  <testcase name="isInsuranceValid()" classname="option2.InsuranceTest" time="0.0"/>
+  <testcase name="testEquals()" classname="option2.InsuranceTest" time="0.001"/>
+  <testcase name="getAdditionalDrivers()" classname="option2.InsuranceTest" time="0.002"/>
+  <testcase name="getOwner()" classname="option2.InsuranceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AcceptedDriversPool.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">AcceptedDriversPool.java</span></div><h1>AcceptedDriversPool.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * Represents a pool of accepted prospective drivers.
+ */
+public class AcceptedDriversPool {
+    private Set&lt;ProspectiveDriver&gt; acceptedProspectiveDrivers;
+
+    /**
+     * Constructs an empty AcceptedDriversPool.
+     */
+<span class="nc" id="L17">    public AcceptedDriversPool() {</span>
+<span class="nc" id="L18">        acceptedProspectiveDrivers = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L19">    }</span>
+
+    /**
+     * Adds a prospective driver to the pool.
+     *
+     * @param prospectiveDriver The prospective driver to add.
+     */
+    public void addDriver(ProspectiveDriver prospectiveDriver) {
+<span class="nc" id="L27">        acceptedProspectiveDrivers.add(prospectiveDriver);</span>
+<span class="nc" id="L28">    }</span>
+
+    /**
+     * Provides information about drivers with a given last name.
+     *
+     * @param lastName The last name of the driver to search for.
+     */
+    public void provideDriverInfo(String lastName) {
+<span class="nc" id="L36">        List&lt;ProspectiveDriver&gt; matchingProspectiveDrivers = acceptedProspectiveDrivers.stream()</span>
+<span class="nc" id="L37">                .filter(prospectiveDriver -&gt; prospectiveDriver.getName().getLastName().equalsIgnoreCase(lastName))</span>
+<span class="nc" id="L38">                .sorted((d1, d2) -&gt; d1.getName().getFirstName().compareTo(d2.getName().getFirstName()))</span>
+<span class="nc" id="L39">                .collect(Collectors.toList());</span>
+
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (matchingProspectiveDrivers.isEmpty()) {</span>
+<span class="nc" id="L42">            System.out.println(&quot;No registered driver found&quot;);</span>
+        } else {
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            for (ProspectiveDriver prospectiveDriver : matchingProspectiveDrivers) {</span>
+<span class="nc" id="L45">                System.out.println(prospectiveDriver.getName().getFirstName() + &quot; &quot; + prospectiveDriver.getName().getLastName());</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">                for (Vehicle vehicle : prospectiveDriver.getVehicles()) {</span>
+<span class="nc" id="L47">                    System.out.println(vehicle.toString());</span>
+<span class="nc" id="L48">                }</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                if (!prospectiveDriver.getDriverHistory().isEmpty()) {</span>
+<span class="nc" id="L50">                    System.out.println(&quot;Driving violations:&quot;);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                    for (DriverHistory history : prospectiveDriver.getDriverHistory()) {</span>
+<span class="nc" id="L52">                        System.out.println(history.toString());</span>
+<span class="nc" id="L53">                    }</span>
+                }
+<span class="nc" id="L55">            }</span>
+        }
+<span class="nc" id="L57">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

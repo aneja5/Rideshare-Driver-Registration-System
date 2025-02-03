@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">RegistrationValidator.java</span></div><h1>RegistrationValidator.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.*;
+
+/**
+ * Validates the registration of prospective drivers and their vehicles.
+ */
+<span class="nc" id="L10">public class RegistrationValidator {</span>
+<span class="fc" id="L11">    private static final List&lt;ProspectiveDriver&gt; acceptedProspectiveDrivers = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Main method for prospective driver registration.
+     *
+     * @param args unused command line arguments
+     * @throws Exception for unexpected errors during user interaction
+     */
+    public static void main(String[] args) {
+<span class="nc" id="L20">        try (Scanner scanner = new Scanner(System.in)) {</span>
+            while (true) {
+<span class="nc" id="L22">                displayMenu();</span>
+<span class="nc" id="L23">                int choice = getChoice(scanner);</span>
+
+<span class="nc bnc" id="L25" title="All 3 branches missed.">                switch (choice) {</span>
+                    case 1:
+<span class="nc" id="L27">                        registerDriver(scanner);</span>
+<span class="nc" id="L28">                        break;</span>
+                    case 2:
+<span class="nc" id="L30">                        System.out.println(&quot;Exiting ProspectiveDriver Registration&quot;);</span>
+<span class="nc" id="L31">                        return;</span>
+                    default:
+<span class="nc" id="L33">                        System.out.println(&quot;Invalid choice!&quot;);</span>
+                }
+<span class="nc" id="L35">            }</span>
+<span class="nc" id="L36">        } catch (Exception e) {</span>
+<span class="nc" id="L37">            System.out.println(&quot;An unexpected error occurred: &quot; + e.getMessage());</span>
+        }
+<span class="nc" id="L39">    }</span>
+
+    /**
+     * Displays the registration menu.
+     */
+    private static void displayMenu() {
+<span class="nc" id="L45">        System.out.println(&quot;ProspectiveDriver Registration&quot;);</span>
+<span class="nc" id="L46">        System.out.println(&quot;1. Register ProspectiveDriver&quot;);</span>
+<span class="nc" id="L47">        System.out.println(&quot;2. Exit&quot;);</span>
+<span class="nc" id="L48">        System.out.print(&quot;Enter your choice: &quot;);</span>
+<span class="nc" id="L49">    }</span>
+
+    /**
+     * Gets validated menu choice as an integer.
+     *
+     * @param scanner the Scanner object used for user input
+     * @return the valid integer choice entered by the user
+     */
+    private static int getChoice(Scanner scanner) {
+<span class="nc" id="L58">        int choice = -1;</span>
+        try {
+<span class="nc" id="L60">            choice = scanner.nextInt();</span>
+<span class="nc" id="L61">        } catch (InputMismatchException e) {</span>
+<span class="nc" id="L62">            System.out.println(&quot;Invalid input. Please enter a number.&quot;);</span>
+<span class="nc" id="L63">        }</span>
+<span class="nc" id="L64">        scanner.nextLine();</span>
+<span class="nc" id="L65">        return choice;</span>
+    }
+
+    /**
+     * Guides user through driver registration, validates, and adds to accepted list.
+     *
+     * @param scanner the Scanner object used for user input
+     */
+    private static void registerDriver(Scanner scanner) {
+<span class="nc" id="L74">        System.out.println(&quot;Welcome to the ProspectiveDriver Registration System!&quot;);</span>
+
+<span class="nc" id="L76">        String firstName = getNotEmptyInput(scanner, &quot;Enter driver's first name: &quot;);</span>
+<span class="nc" id="L77">        String lastName = getNotEmptyInput(scanner, &quot;Enter driver's last name: &quot;);</span>
+<span class="nc" id="L78">        LocalDate dateOfBirth = getDateInput(scanner, &quot;Enter driver's date of birth (yyyy-MM-dd):&quot;);</span>
+
+<span class="nc" id="L80">        Person driverInfo = new Person(firstName, lastName);</span>
+
+<span class="nc" id="L82">        DriversLicense license = getDriversLicenseInformation(scanner);</span>
+<span class="nc" id="L83">        ProspectiveDriver newProspectiveDriver = new ProspectiveDriver(driverInfo, license);</span>
+
+<span class="nc" id="L85">        boolean moreVehicles = true;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        while (moreVehicles) {</span>
+<span class="nc" id="L87">            Vehicle vehicle = getVehicleInformation(scanner);</span>
+<span class="nc" id="L88">            Insurance insurance = getInsuranceInformation(scanner);</span>
+<span class="nc" id="L89">            vehicle.setInsurance(insurance);</span>
+
+<span class="nc" id="L91">            collectVehicleHistory(scanner, vehicle);</span>
+
+<span class="nc" id="L93">            newProspectiveDriver.addVehicle(vehicle);</span>
+
+<span class="nc" id="L95">            moreVehicles = promptForMoreVehicles(scanner);</span>
+<span class="nc" id="L96">        }</span>
+
+<span class="nc" id="L98">        collectDriverHistory(scanner, newProspectiveDriver);</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (validateRegistration(driverInfo, dateOfBirth, newProspectiveDriver)) {</span>
+<span class="nc" id="L101">            acceptedProspectiveDrivers.add(newProspectiveDriver);</span>
+<span class="nc" id="L102">            System.out.println(&quot;ProspectiveDriver registration complete!&quot;);</span>
+        } else {
+<span class="nc" id="L104">            System.out.println(&quot;ProspectiveDriver registration application rejected.&quot;);</span>
+        }
+<span class="nc" id="L106">    }</span>
+
+    /**
+     * Collects driver's license details.
+     *
+     * @param scanner scanner for user input
+     * @return DriversLicense object
+     */
+    private static DriversLicense getDriversLicenseInformation(Scanner scanner) {
+<span class="nc" id="L115">        System.out.println(&quot;Enter license details-&quot;);</span>
+<span class="nc" id="L116">        String licenseFirstName = getNotEmptyInput(scanner, &quot;First name: &quot;);</span>
+<span class="nc" id="L117">        String licenseLastName = getNotEmptyInput(scanner, &quot;Last name: &quot;);</span>
+<span class="nc" id="L118">        Person driverNameOnLicense = new Person(licenseFirstName, licenseLastName);</span>
+<span class="nc" id="L119">        LocalDate licenseDateOfBirth = getDateInput(scanner, &quot;Date of birth (yyyy-MM-dd): &quot;);</span>
+<span class="nc" id="L120">        String licenseNumber = getInput(scanner, &quot;License number: &quot;).toUpperCase();</span>
+<span class="nc" id="L121">        Address address = getAddressInformation(scanner);</span>
+<span class="nc" id="L122">        String countryOfIssuance = getInput(scanner, &quot;Country of license issuance: &quot;).toUpperCase();</span>
+<span class="nc" id="L123">        String stateOfIssuance = getInput(scanner, &quot;State of license issuance: &quot;).toUpperCase();</span>
+<span class="nc" id="L124">        LocalDate issuanceDate = getDateInput(scanner, &quot;License issuance date (yyyy-MM-dd): &quot;);</span>
+<span class="nc" id="L125">        LocalDate expirationDate = getDateInput(scanner, &quot;License expiration date (yyyy-MM-dd): &quot;);</span>
+
+<span class="nc" id="L127">        return new DriversLicense(driverNameOnLicense, licenseDateOfBirth, licenseNumber, address,</span>
+                countryOfIssuance, stateOfIssuance, issuanceDate, expirationDate);
+    }
+
+    /**
+     * Collects driver's address.
+     *
+     * @param scanner scanner for user input
+     * @return Address object
+     */
+    private static Address getAddressInformation(Scanner scanner) {
+<span class="nc" id="L138">        System.out.println(&quot;Enter driver's address:&quot;);</span>
+<span class="nc" id="L139">        String streetAddress = getInput(scanner, &quot;Street: &quot;);</span>
+<span class="nc" id="L140">        String city = getInput(scanner, &quot;City: &quot;);</span>
+<span class="nc" id="L141">        String state = getInput(scanner, &quot;State: &quot;).toUpperCase();</span>
+<span class="nc" id="L142">        String zipcode = getInput(scanner, &quot;Zip-code: &quot;).toUpperCase();</span>
+
+<span class="nc" id="L144">        return new Address(streetAddress, city, state, zipcode);</span>
+    }
+
+    /**
+     * Collects vehicle details.
+     *
+     * @param scanner scanner for user input
+     * @return Vehicle object
+     */
+    private static Vehicle getVehicleInformation(Scanner scanner) {
+<span class="nc" id="L154">        System.out.println(&quot;Enter the vehicle details&quot;);</span>
+<span class="nc" id="L155">        String make = getInput(scanner, &quot;Make: &quot;);</span>
+<span class="nc" id="L156">        String model = getInput(scanner, &quot;Model: &quot;);</span>
+<span class="nc" id="L157">        int year = getIntInput(scanner, &quot;Vehicle year: &quot;);</span>
+<span class="nc" id="L158">        String color = getInput(scanner, &quot;Color : &quot;);</span>
+<span class="nc" id="L159">        String licensePlateNumber = getInput(scanner, &quot;License plate number: &quot;).toUpperCase();</span>
+<span class="nc" id="L160">        String ownerFirstName = getInput(scanner, &quot;Vehicle owner's first name: &quot;);</span>
+<span class="nc" id="L161">        String ownerLastName = getInput(scanner, &quot;Vehicle owner's last name: &quot;);</span>
+
+<span class="nc" id="L163">        Person vehicleOwner = new Person(ownerFirstName, ownerLastName);</span>
+<span class="nc" id="L164">        return new Vehicle(make, model, year, color, licensePlateNumber, vehicleOwner);</span>
+    }
+
+    /**
+     * Prompts the user to decide whether to add another vehicle.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @return true if the user chooses to add another vehicle, false otherwise.
+     */
+    private static boolean promptForMoreVehicles(Scanner scanner) {
+<span class="nc" id="L174">        System.out.println(&quot;Do you want to add another vehicle? (yes/no):&quot;);</span>
+<span class="nc" id="L175">        String decision = scanner.nextLine().trim().toLowerCase();</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">        while (!decision.equals(&quot;yes&quot;) &amp;&amp; !decision.equals(&quot;no&quot;)) {</span>
+<span class="nc" id="L177">            System.out.println(&quot;Invalid input. Please enter 'yes' or 'no':&quot;);</span>
+<span class="nc" id="L178">            decision = scanner.nextLine().trim().toLowerCase();</span>
+        }
+<span class="nc" id="L180">        return decision.equals(&quot;yes&quot;);</span>
+    }
+
+    /**
+     * Collects vehicle insurance details.
+     *
+     * @param scanner scanner for user input
+     * @return Insurance object
+     */
+    private static Insurance getInsuranceInformation(Scanner scanner) {
+<span class="nc" id="L190">        System.out.println(&quot;Enter insurance details&quot;);</span>
+<span class="nc" id="L191">        String ownerFirstName = getInput(scanner, &quot;Owner's first name: &quot;);</span>
+<span class="nc" id="L192">        String ownerLastName = getInput(scanner, &quot;Owner's last name: &quot;);</span>
+<span class="nc" id="L193">        Person insuranceOwner = new Person(ownerFirstName, ownerLastName);</span>
+<span class="nc" id="L194">        LocalDate insuranceExpirationDate = getDateInput(scanner, &quot;Enter insurance expiration date (yyyy-MM-dd):&quot;);</span>
+
+<span class="nc" id="L196">        Person[] additionalDrivers = getAdditionalDrivers(scanner);</span>
+
+<span class="nc" id="L198">        return new Insurance(insuranceOwner, additionalDrivers, insuranceExpirationDate);</span>
+    }
+
+    /**
+     * Retrieves information about additional drivers added in the insurance, if any, from the user.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @return An array of Person objects representing the additional drivers, or null if there are none.
+     */
+    private static Person[] getAdditionalDrivers(Scanner scanner) {
+<span class="nc" id="L208">        System.out.println(&quot;Are there additional drivers added in the insurance? (yes/no):&quot;);</span>
+<span class="nc" id="L209">        String additionalDriversChoice = scanner.nextLine().toLowerCase();</span>
+
+<span class="nc bnc" id="L211" title="All 2 branches missed.">        if (!additionalDriversChoice.equals(&quot;yes&quot;)) {</span>
+<span class="nc" id="L212">            return null;</span>
+        }
+
+<span class="nc" id="L215">        System.out.println(&quot;Enter the number of additional drivers:&quot;);</span>
+<span class="nc" id="L216">        int numAdditionalDrivers = getIntInput(scanner, &quot;&quot;);</span>
+
+<span class="nc" id="L218">        Person[] additionalDrivers = new Person[numAdditionalDrivers];</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        for (int i = 0; i &lt; numAdditionalDrivers; i++) {</span>
+<span class="nc" id="L220">            String firstName = getInput(scanner, &quot;Enter additional driver &quot; + (i + 1) + &quot;'s first name:&quot;);</span>
+<span class="nc" id="L221">            String lastName = getInput(scanner, &quot;Enter additional driver &quot; + (i + 1) + &quot;'s last name:&quot;);</span>
+<span class="nc" id="L222">            additionalDrivers[i] = new Person(firstName, lastName);</span>
+        }
+
+<span class="nc" id="L225">        return additionalDrivers;</span>
+    }
+
+    /**
+     * Collects vehicle incident history (if any).
+     *
+     * @param scanner scanner for user input
+     * @param vehicle vehicle to associate history with
+     */
+    private static void collectVehicleHistory(Scanner scanner, Vehicle vehicle) {
+<span class="nc" id="L235">        String hasHistory = getNotEmptyInput(scanner, &quot;Does this vehicle have a history of incidents? (yes/no):&quot;).toLowerCase();</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        if (hasHistory.equals(&quot;no&quot;)) {</span>
+<span class="nc" id="L237">            return;</span>
+        }
+
+<span class="nc" id="L240">        int numIncidents = getIntInput(scanner, &quot;Enter number of incidents involving the vehicle:&quot;);</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        for (int i = 0; i &lt; numIncidents; i++) {</span>
+<span class="nc" id="L242">            System.out.println(&quot;Details for incident &quot; + (i + 1) + &quot;:&quot;);</span>
+<span class="nc" id="L243">            LocalDate date = getDateInput(scanner, &quot;Enter date of incident (yyyy-MM-dd):&quot;);</span>
+<span class="nc" id="L244">            String firstName = getNotEmptyInput(scanner, &quot;First name of the driver involved in the incident: &quot;);</span>
+<span class="nc" id="L245">            String lastName = getNotEmptyInput(scanner, &quot;Last name of the driver involved in the incident: &quot;);</span>
+<span class="nc" id="L246">            Person incidentDriver = new Person(firstName, lastName);</span>
+
+<span class="nc" id="L248">            int incidentType = getIntInput(scanner, &quot;Enter incident type (1 for Crash, 2 for Violation):&quot;);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">            if (incidentType == 1) {</span>
+<span class="nc" id="L250">                handleCrashInput(scanner, vehicle, date, incidentDriver);</span>
+            } else {
+<span class="nc" id="L252">                handleVehicleViolationCategoryInput(scanner, vehicle, date, incidentDriver);</span>
+            }
+        }
+<span class="nc" id="L255">    }</span>
+
+    /**
+     * Handles user input to select the type of crash and adds the corresponding vehicle history.
+     *
+     * @param scanner        The Scanner object used to receive user input.
+     * @param vehicle        The Vehicle object involved in the crash.
+     * @param date           The date of the crash.
+     * @param incidentDriver The Person object representing the driver involved in the crash.
+     */
+    private static void handleCrashInput(Scanner scanner, Vehicle vehicle, LocalDate date, Person incidentDriver) {
+<span class="nc" id="L266">        System.out.println(&quot;Select crash type:&quot;);</span>
+<span class="nc" id="L267">        CrashType[] crashTypes = CrashType.values();</span>
+<span class="nc bnc" id="L268" title="All 2 branches missed.">        for (int i = 0; i &lt; crashTypes.length; i++) {</span>
+<span class="nc" id="L269">            System.out.println((i + 1) + &quot;. &quot; + crashTypes[i]);</span>
+        }
+<span class="nc" id="L271">        int crashTypeIndex = getIntInput(scanner, &quot;Choose the number for crash type: &quot;) - 1;</span>
+
+<span class="nc bnc" id="L273" title="All 4 branches missed.">        if (crashTypeIndex &gt;= 0 &amp;&amp; crashTypeIndex &lt; crashTypes.length) {</span>
+<span class="nc" id="L274">            CrashType selectedCrashType = crashTypes[crashTypeIndex];</span>
+<span class="nc" id="L275">            vehicle.addVehicleHistory(new VehicleHistory(date, incidentDriver, selectedCrashType, null));</span>
+<span class="nc" id="L276">        } else {</span>
+<span class="nc" id="L277">            System.out.println(&quot;Invalid selection. Please choose a valid crash type.&quot;);</span>
+<span class="nc" id="L278">            handleCrashInput(scanner, vehicle, date, incidentDriver); // Recursive call for correct input</span>
+        }
+<span class="nc" id="L280">    }</span>
+
+    /**
+     * Handles user input to select the type of violation category for the vehicle and directs to
+     * the appropriate method based on the selection.
+     *
+     * @param scanner        The Scanner object used to receive user input.
+     * @param vehicle        The Vehicle object involved in the violation.
+     * @param date           The date of the violation.
+     * @param incidentDriver The Person object representing the driver involved in the violation.
+     */
+    private static void handleVehicleViolationCategoryInput(Scanner scanner, Vehicle vehicle, LocalDate date, Person incidentDriver) {
+<span class="nc" id="L292">        System.out.println(&quot;Enter type of vehicle violation (1 for Moving, 2 for Non-Moving):&quot;);</span>
+<span class="nc" id="L293">        int violationCategory = getIntInput(scanner, &quot;&quot;);</span>
+
+<span class="nc bnc" id="L295" title="All 2 branches missed.">        if (violationCategory == 1) {</span>
+<span class="nc" id="L296">            handleVehicleMovingViolation(scanner, vehicle, date, incidentDriver);</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">        } else if (violationCategory == 2) {</span>
+<span class="nc" id="L298">            handleVehicleNonMovingViolation(scanner, vehicle, date, incidentDriver);</span>
+        } else {
+<span class="nc" id="L300">            System.out.println(&quot;Invalid input. Please enter '1' for Moving or '2' for Non-Moving violations.&quot;);</span>
+<span class="nc" id="L301">            handleVehicleViolationCategoryInput(scanner, vehicle, date, incidentDriver);</span>
+        }
+<span class="nc" id="L303">    }</span>
+
+    /**
+     * Handles user input to select the type of moving violation for the vehicle and adds the
+     * corresponding vehicle history.
+     *
+     * @param scanner        The Scanner object used to receive user input.
+     * @param vehicle        The Vehicle object involved in the violation.
+     * @param date           The date of the violation.
+     * @param incidentDriver The Person object representing the driver involved in the violation.
+     */
+    private static void handleVehicleMovingViolation(Scanner scanner, Vehicle vehicle, LocalDate date, Person incidentDriver) {
+<span class="nc" id="L315">        System.out.println(&quot;Select moving violation type:&quot;);</span>
+<span class="nc" id="L316">        ViolationType.MovingViolation[] movingViolations = ViolationType.MovingViolation.values();</span>
+<span class="nc bnc" id="L317" title="All 2 branches missed.">        for (int i = 0; i &lt; movingViolations.length; i++) {</span>
+<span class="nc" id="L318">            System.out.println((i + 1) + &quot;. &quot; + movingViolations[i]);</span>
+        }
+<span class="nc" id="L320">        int choice = getIntInput(scanner, &quot;&quot;) - 1;</span>
+
+<span class="nc bnc" id="L322" title="All 4 branches missed.">        if (choice &gt;= 0 &amp;&amp; choice &lt; movingViolations.length) {</span>
+<span class="nc" id="L323">            ViolationType.MovingViolation violationType = movingViolations[choice];</span>
+<span class="nc" id="L324">            vehicle.addVehicleHistory(new VehicleHistory(date, incidentDriver, violationType, null));</span>
+<span class="nc" id="L325">        } else {</span>
+<span class="nc" id="L326">            System.out.println(&quot;Invalid selection. Please choose a valid violation type.&quot;);</span>
+<span class="nc" id="L327">            handleVehicleMovingViolation(scanner, vehicle, date, incidentDriver);</span>
+        }
+<span class="nc" id="L329">    }</span>
+
+    /**
+     * Handles user input to select the type of non-moving violation for the vehicle and adds the
+     * corresponding vehicle history.
+     *
+     * @param scanner        The Scanner object used to receive user input.
+     * @param vehicle        The Vehicle object involved in the violation.
+     * @param date           The date of the violation.
+     * @param incidentDriver The Person object representing the driver involved in the violation.
+     */
+    private static void handleVehicleNonMovingViolation(Scanner scanner, Vehicle vehicle, LocalDate date, Person incidentDriver) {
+<span class="nc" id="L341">        System.out.println(&quot;Select non-moving violation type:&quot;);</span>
+<span class="nc" id="L342">        ViolationType.NonMovingViolation[] nonMovingViolations = ViolationType.NonMovingViolation.values();</span>
+<span class="nc bnc" id="L343" title="All 2 branches missed.">        for (int i = 0; i &lt; nonMovingViolations.length; i++) {</span>
+<span class="nc" id="L344">            System.out.println((i + 1) + &quot;. &quot; + nonMovingViolations[i]);</span>
+        }
+<span class="nc" id="L346">        int choice = getIntInput(scanner, &quot;&quot;) - 1;</span>
+
+<span class="nc bnc" id="L348" title="All 4 branches missed.">        if (choice &gt;= 0 &amp;&amp; choice &lt; nonMovingViolations.length) {</span>
+<span class="nc" id="L349">            ViolationType.NonMovingViolation violationType = nonMovingViolations[choice];</span>
+<span class="nc" id="L350">            vehicle.addVehicleHistory(new VehicleHistory(date, incidentDriver, violationType, null));</span>
+<span class="nc" id="L351">        } else {</span>
+<span class="nc" id="L352">            System.out.println(&quot;Invalid selection. Please choose a valid violation type.&quot;);</span>
+<span class="nc" id="L353">            handleVehicleNonMovingViolation(scanner, vehicle, date, incidentDriver);</span>
+        }
+<span class="nc" id="L355">    }</span>
+
+    /**
+     * Collects driver's violation history (if any).
+     *
+     * @param scanner           scanner for user input
+     * @param prospectiveDriver driver to associate history with
+     */
+    private static void collectDriverHistory(Scanner scanner, ProspectiveDriver prospectiveDriver) {
+<span class="nc" id="L364">        String hasViolations = getNotEmptyInput(scanner, &quot;Does this prospectiveDriver have a history of violations? (yes/no):&quot;).toLowerCase();</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">        if (hasViolations.equals(&quot;no&quot;)) {</span>
+<span class="nc" id="L366">            return;</span>
+        }
+
+<span class="nc" id="L369">        int numViolations = getIntInput(scanner, &quot;Enter the number of violations committed by the prospectiveDriver:&quot;);</span>
+<span class="nc bnc" id="L370" title="All 2 branches missed.">        for (int i = 0; i &lt; numViolations; i++) {</span>
+<span class="nc" id="L371">            LocalDate date = getDateInput(scanner, &quot;Enter date of violation (yyyy-MM-dd):&quot;);</span>
+<span class="nc" id="L372">            handleViolationCategoryInput(scanner, prospectiveDriver, date);</span>
+        }
+<span class="nc" id="L374">    }</span>
+
+    /**
+     * Handles user input to select the type of violation category for the prospective driver and
+     * directs to the appropriate method based on the selection.
+     *
+     * @param scanner           The Scanner object used to receive user input.
+     * @param prospectiveDriver The ProspectiveDriver object for whom the violation is being handled.
+     * @param date              The date of the violation.
+     */
+    private static void handleViolationCategoryInput(Scanner scanner, ProspectiveDriver prospectiveDriver, LocalDate date) {
+<span class="nc" id="L385">        System.out.println(&quot;Enter type of violation (1 for Moving, 2 for Non-Moving):&quot;);</span>
+<span class="nc" id="L386">        int violationCategory = getIntInput(scanner, &quot;&quot;);</span>
+
+<span class="nc bnc" id="L388" title="All 2 branches missed.">        if (violationCategory == 1) {</span>
+<span class="nc" id="L389">            handleMovingViolation(scanner, prospectiveDriver, date);</span>
+<span class="nc bnc" id="L390" title="All 2 branches missed.">        } else if (violationCategory == 2) {</span>
+<span class="nc" id="L391">            handleNonMovingViolation(scanner, prospectiveDriver, date);</span>
+        } else {
+<span class="nc" id="L393">            System.out.println(&quot;Invalid input. Please enter '1' for Moving or '2' for Non-Moving violations.&quot;);</span>
+<span class="nc" id="L394">            handleViolationCategoryInput(scanner, prospectiveDriver, date);</span>
+        }
+<span class="nc" id="L396">    }</span>
+
+    /**
+     * Handles user input to select the type of moving violation for the prospective driver and
+     * adds the corresponding driver history.
+     *
+     * @param scanner           The Scanner object used to receive user input.
+     * @param prospectiveDriver The ProspectiveDriver object for whom the violation is being handled.
+     * @param date              The date of the violation.
+     */
+    private static void handleMovingViolation(Scanner scanner, ProspectiveDriver prospectiveDriver, LocalDate date) {
+<span class="nc" id="L407">        System.out.println(&quot;Select moving violation type:&quot;);</span>
+<span class="nc" id="L408">        ViolationType.MovingViolation[] movingViolations = ViolationType.MovingViolation.values();</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">        for (int i = 0; i &lt; movingViolations.length; i++) {</span>
+<span class="nc" id="L410">            System.out.println((i + 1) + &quot;. &quot; + movingViolations[i]);</span>
+        }
+<span class="nc" id="L412">        int choice = getIntInput(scanner, &quot;&quot;) - 1;</span>
+
+<span class="nc bnc" id="L414" title="All 4 branches missed.">        if (choice &gt;= 0 &amp;&amp; choice &lt; movingViolations.length) {</span>
+<span class="nc" id="L415">            ViolationType.MovingViolation violationType = movingViolations[choice];</span>
+<span class="nc" id="L416">            prospectiveDriver.addDriverHistory(new DriverHistory(date, violationType));</span>
+<span class="nc" id="L417">        } else {</span>
+<span class="nc" id="L418">            System.out.println(&quot;Invalid selection. Please choose a valid violation type.&quot;);</span>
+<span class="nc" id="L419">            handleMovingViolation(scanner, prospectiveDriver, date); // Recursive call for correct input</span>
+        }
+<span class="nc" id="L421">    }</span>
+
+    /**
+     * Handles user input to select the type of non-moving violation for the prospective driver and
+     * adds the corresponding driver history.
+     *
+     * @param scanner           The Scanner object used to receive user input.
+     * @param prospectiveDriver The ProspectiveDriver object for whom the violation is being handled.
+     * @param date              The date of the violation.
+     */
+    private static void handleNonMovingViolation(Scanner scanner, ProspectiveDriver prospectiveDriver, LocalDate date) {
+<span class="nc" id="L432">        System.out.println(&quot;Select non-moving violation type:&quot;);</span>
+<span class="nc" id="L433">        ViolationType.NonMovingViolation[] nonMovingViolations = ViolationType.NonMovingViolation.values();</span>
+<span class="nc bnc" id="L434" title="All 2 branches missed.">        for (int i = 0; i &lt; nonMovingViolations.length; i++) {</span>
+<span class="nc" id="L435">            System.out.println((i + 1) + &quot;. &quot; + nonMovingViolations[i]);</span>
+        }
+<span class="nc" id="L437">        int choice = getIntInput(scanner, &quot;&quot;) - 1;</span>
+
+<span class="nc bnc" id="L439" title="All 4 branches missed.">        if (choice &gt;= 0 &amp;&amp; choice &lt; nonMovingViolations.length) {</span>
+<span class="nc" id="L440">            ViolationType.NonMovingViolation violationType = nonMovingViolations[choice];</span>
+<span class="nc" id="L441">            prospectiveDriver.addDriverHistory(new DriverHistory(date, violationType));</span>
+<span class="nc" id="L442">        } else {</span>
+<span class="nc" id="L443">            System.out.println(&quot;Invalid selection. Please choose a valid violation type.&quot;);</span>
+<span class="nc" id="L444">            handleNonMovingViolation(scanner, prospectiveDriver, date);</span>
+        }
+<span class="nc" id="L446">    }</span>
+
+
+    /**
+     * Retrieves a string input from the user via the provided Scanner object and displays the given prompt.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @param prompt  The prompt message to display to the user.
+     * @return A string containing the user's input.
+     */
+    private static String getInput(Scanner scanner, String prompt) {
+<span class="nc" id="L457">        System.out.print(prompt);</span>
+<span class="nc" id="L458">        return scanner.nextLine();</span>
+    }
+
+    /**
+     * Retrieves a non-empty string input from the user via the provided Scanner object and displays the given prompt.
+     * Continues to prompt the user until a non-empty input is provided.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @param prompt  The prompt message to display to the user.
+     * @return A non-empty string containing the user's input.
+     */
+    private static String getNotEmptyInput(Scanner scanner, String prompt) {
+<span class="nc" id="L470">        String input = &quot;&quot;;</span>
+<span class="nc" id="L471">        System.out.print(prompt);</span>
+
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        while (input.isEmpty()) {</span>
+<span class="nc bnc" id="L474" title="All 2 branches missed.">            if (scanner.hasNextLine()) {</span>
+<span class="nc" id="L475">                input = scanner.nextLine().trim();</span>
+            }
+<span class="nc bnc" id="L477" title="All 2 branches missed.">            if (input.isEmpty()) {</span>
+<span class="nc" id="L478">                System.out.println(&quot;Input cannot be empty. Please try again.&quot;);</span>
+<span class="nc" id="L479">                System.out.print(prompt);</span>
+            }
+        }
+<span class="nc" id="L482">        return input;</span>
+    }
+
+    /**
+     * Retrieves an integer input from the user via the provided Scanner object and displays the given prompt.
+     * Continues to prompt the user until a valid integer input is provided.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @param prompt  The prompt message to display to the user.
+     * @return An integer representing the user's input.
+     */
+    private static int getIntInput(Scanner scanner, String prompt) {
+        while (true) {
+            try {
+<span class="nc" id="L496">                System.out.print(prompt);</span>
+<span class="nc" id="L497">                return Integer.parseInt(scanner.nextLine());</span>
+<span class="nc" id="L498">            } catch (NumberFormatException e) {</span>
+<span class="nc" id="L499">                System.out.println(&quot;Invalid input. Please enter a number.&quot;);</span>
+<span class="nc" id="L500">            }</span>
+        }
+    }
+
+    /**
+     * Retrieves a LocalDate input from the user via the provided Scanner object and displays the given prompt.
+     * Continues to prompt the user until a valid LocalDate input is provided in the format yyyy-MM-dd.
+     *
+     * @param scanner The Scanner object used to receive user input.
+     * @param prompt  The prompt message to display to the user.
+     * @return A LocalDate object representing the user's input.
+     */
+    private static LocalDate getDateInput(Scanner scanner, String prompt) {
+        while (true) {
+            try {
+<span class="nc" id="L515">                System.out.print(prompt);</span>
+<span class="nc" id="L516">                return LocalDate.parse(scanner.nextLine());</span>
+<span class="nc" id="L517">            } catch (DateTimeParseException e) {</span>
+<span class="nc" id="L518">                System.out.println(&quot;Invalid date format. Please enter the date in the format yyyy-MM-dd.&quot;);</span>
+<span class="nc" id="L519">            }</span>
+        }
+    }
+
+    /**
+     * Validates the registration of a prospective driver based on their information, license, and vehicles.
+     *
+     * @param driversInfo       Information provided by the prospective driver.
+     * @param dateOfBirth       Prospective driver's date of birth.
+     * @param prospectiveDriver The prospective driver to be validated.
+     * @return True if the registration is valid, false otherwise.
+     */
+    public static boolean validateRegistration(Person driversInfo, LocalDate dateOfBirth,
+                                               ProspectiveDriver prospectiveDriver) {
+
+        // Validate driver's license
+<span class="fc bfc" id="L535" title="All 2 branches covered.">        if (!validateDriverLicense(prospectiveDriver.getLicense(), driversInfo, dateOfBirth)) {</span>
+<span class="fc" id="L536">            return false;</span>
+        }
+
+        // Validate driver's vehicles
+<span class="pc bpc" id="L540" title="1 of 2 branches missed.">        for (Vehicle vehicle : prospectiveDriver.getVehicles()) {</span>
+<span class="pc bpc" id="L541" title="1 of 2 branches missed.">            if (!validateVehicle(vehicle)) {</span>
+<span class="fc" id="L542">                return false;</span>
+            }
+<span class="nc" id="L544">        }</span>
+
+        // Validate driver's history
+<span class="nc bnc" id="L547" title="All 2 branches missed.">        if (!validateDriverHistory(prospectiveDriver.getDriverHistory())) {</span>
+<span class="nc" id="L548">            return false;</span>
+        }
+
+<span class="nc" id="L551">        return true;</span>
+    }
+
+    /**
+     * Validates a driver's license based on various criteria including validity, age requirement,
+     * issuance/expiration dates, and country of issuance.
+     *
+     * @param license     The driver's license to be validated.
+     * @param driversInfo Information provided by the prospective driver.
+     * @param dateOfBirth Prospective driver's date of birth.
+     * @return True if the license is valid, false otherwise.
+     */
+    protected static boolean validateDriverLicense(DriversLicense license, Person driversInfo, LocalDate dateOfBirth) {
+<span class="fc bfc" id="L564" title="All 2 branches covered.">        if (!license.isValidDriver(driversInfo, dateOfBirth)) {</span>
+<span class="fc" id="L565">            System.out.println(&quot;Prospective Driver's credential doesn't match.&quot;);</span>
+<span class="fc" id="L566">            return false;</span>
+        }
+
+<span class="pc bpc" id="L569" title="1 of 2 branches missed.">        if (!license.isValidAge()) {</span>
+<span class="nc" id="L570">            System.out.println(&quot;ProspectiveDriver must be at least 21 years old.&quot;);</span>
+<span class="nc" id="L571">            return false;</span>
+        }
+
+<span class="pc bpc" id="L574" title="1 of 2 branches missed.">        if (!license.isValidCountryOfIssuance()) {</span>
+<span class="nc" id="L575">            System.out.println(&quot;Currently drivers license issued in US and Canada are accepted.&quot;);</span>
+<span class="nc" id="L576">            return false;</span>
+        }
+
+<span class="pc bpc" id="L579" title="1 of 2 branches missed.">        if (!license.isValidIssuanceDate()) {</span>
+<span class="nc" id="L580">            System.out.println(&quot;License issuance date must be more than 6 months ago.&quot;);</span>
+<span class="nc" id="L581">            return false;</span>
+        }
+
+<span class="fc bfc" id="L584" title="All 2 branches covered.">        if (!license.isValidExpirationDate()) {</span>
+<span class="fc" id="L585">            System.out.println(&quot;License has expired.&quot;);</span>
+<span class="fc" id="L586">            return false;</span>
+        }
+
+<span class="fc" id="L589">        return true;</span>
+    }
+
+    /**
+     * Validates a vehicle based on its age, valid insurance, and owner match with insurance.
+     *
+     * @param vehicle The vehicle to be validated.
+     * @return True if the vehicle is valid, false otherwise.
+     */
+    protected static boolean validateVehicle(Vehicle vehicle) {
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">        if (!vehicle.isValidVehicle()) {</span>
+<span class="nc" id="L600">            System.out.println(&quot;Vehicle must be less than 15 years old and meet other criteria.&quot;);</span>
+<span class="nc" id="L601">            return false;</span>
+        }
+
+<span class="pc bpc" id="L604" title="2 of 4 branches missed.">        if (vehicle.getInsurance() == null || !vehicle.getInsurance().isInsuranceValid() ||</span>
+<span class="nc bnc" id="L605" title="All 2 branches missed.">                !vehicle.isVehicleOwnerAndInsuranceOwnerNameSame()) {</span>
+<span class="fc" id="L606">            System.out.println(&quot;Vehicle insurance is not valid or does not match the vehicle owner.&quot;);</span>
+<span class="fc" id="L607">            return false;</span>
+        }
+
+        // Check vehicle history for recent crashes or moving violations
+<span class="nc bnc" id="L611" title="All 2 branches missed.">        for (VehicleHistory vHistory : vehicle.getVehicleHistory()) {</span>
+<span class="nc bnc" id="L612" title="All 2 branches missed.">            if (vHistory.getDate().isAfter(LocalDate.now().minusMonths(6)) &amp;&amp; (</span>
+<span class="nc bnc" id="L613" title="All 4 branches missed.">                    vHistory.getCrashType() != null || vHistory.getViolationType() == ViolationType.MOVING_VIOLATION)) {</span>
+<span class="nc" id="L614">                System.out.println(&quot;Vehicle involved in crashes or moving violations in the last six months.&quot;);</span>
+<span class="nc" id="L615">                return false;</span>
+            }
+<span class="nc" id="L617">        }</span>
+
+<span class="nc" id="L619">        return true;</span>
+    }
+
+    /**
+     * Validates a driver's history for critical moving violations within the past year.
+     *
+     * @param driverHistory The driver's history to be validated.
+     * @return True if the driver's history is clean, false otherwise.
+     */
+    private static boolean validateDriverHistory(List&lt;DriverHistory&gt; driverHistory) {
+<span class="nc bnc" id="L629" title="All 2 branches missed.">        for (DriverHistory history : driverHistory) {</span>
+<span class="nc bnc" id="L630" title="All 2 branches missed.">            if (history.getDate().isAfter(LocalDate.now().minusYears(1)) &amp;&amp; (</span>
+<span class="nc bnc" id="L631" title="All 2 branches missed.">                    history.getViolationType() == ViolationType.MovingViolation.RECKLESS_DRIVING ||</span>
+<span class="nc bnc" id="L632" title="All 2 branches missed.">                            history.getViolationType() == ViolationType.MovingViolation.SPEEDING ||</span>
+<span class="nc bnc" id="L633" title="All 2 branches missed.">                            history.getViolationType() == ViolationType.MovingViolation.DUI ||</span>
+<span class="nc bnc" id="L634" title="All 2 branches missed.">                            history.getViolationType() == ViolationType.MovingViolation.INVALID_LICENSE_INSURANCE)) {</span>
+<span class="nc" id="L635">                System.out.println(&quot;Prospective Driver has critical moving violations in the past year.&quot;);</span>
+<span class="nc" id="L636">                return false;</span>
+            }
+<span class="nc" id="L638">        }</span>
+
+<span class="nc" id="L640">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

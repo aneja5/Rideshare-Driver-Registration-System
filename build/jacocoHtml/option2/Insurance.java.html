@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Insurance.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">FinalProject</a> &gt; <a href="index.source.html" class="el_package">option2</a> &gt; <span class="el_source">Insurance.java</span></div><h1>Insurance.java</h1><pre class="source lang-java linenums">package option2;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Objects;
+
+/**
+ * This class represents an insurance policy. It holds information about the owner,
+ * additional drivers, and the expiration date of the policy.
+ */
+public class Insurance {
+
+    private Person owner;
+    private Person[] additionalDrivers;
+    private LocalDate expirationDate;
+
+    /**
+     * Constructor to create a new Insurance object.
+     *
+     * @param owner             The person who owns the insurance policy.
+     * @param additionalDrivers An array of additional drivers covered by the policy (can be null).
+     * @param expirationDate     The date when the insurance policy expires.
+     */
+<span class="fc" id="L24">    public Insurance(Person owner, Person[] additionalDrivers, LocalDate expirationDate) {</span>
+<span class="fc" id="L25">        this.owner = owner;</span>
+<span class="fc" id="L26">        this.additionalDrivers = additionalDrivers;</span>
+<span class="fc" id="L27">        this.expirationDate = expirationDate;</span>
+<span class="fc" id="L28">    }</span>
+
+    /**
+     * Gets the owner of the insurance policy.
+     *
+     * @return The person who owns the insurance policy.
+     */
+    public Person getOwner() {
+<span class="fc" id="L36">        return owner;</span>
+    }
+
+    /**
+     * Gets an array of additional drivers covered by the insurance policy.
+     *
+     * @return An array of additional drivers (can be null).
+     */
+    public Person[] getAdditionalDrivers() {
+<span class="fc" id="L45">        return additionalDrivers;</span>
+    }
+
+    /**
+     * Gets the expiration date of the insurance policy.
+     *
+     * @return The date when the insurance policy expires.
+     */
+    public LocalDate getExpirationDate() {
+<span class="fc" id="L54">        return expirationDate;</span>
+    }
+
+    /**
+     * Checks if the insurance policy is not expired.
+     *
+     * @return True if the expiration date is after the current date, false otherwise.
+     */
+    public boolean isInsuranceValid() {
+<span class="fc" id="L63">        return (this.expirationDate.isAfter(LocalDate.now()));</span>
+    }
+
+    /**
+     * Checks if the provided person is both the owner and a listed driver on the policy.
+     *
+     * @param driversName The person to check.
+     * @return True if the person is both the owner and listed as an additional driver, false otherwise.
+     */
+    public boolean isDriverAndOwnerSame(Person driversName) {
+<span class="fc" id="L73">        return (driversName.equals(getOwner()));</span>
+    }
+
+    /**
+     * Checks if the provided person is listed as an additional driver on the policy.
+     *
+     * @param driversName The person to check.
+     * @return True if the person is found in the list of additional drivers, false otherwise.
+     */
+    public boolean isDriverInAdditionalDriversList(Person driversName) {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (additionalDrivers != null) {</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            for (Person driver : additionalDrivers) {</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (driver.equals(driversName)) {</span>
+<span class="fc" id="L86">                    return true;</span>
+                }
+            }
+        }
+<span class="fc" id="L90">        return false;</span>
+    }
+
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        if (o == null || getClass() != o.getClass()) return false;</span>
+<span class="fc" id="L97">        Insurance insurance = (Insurance) o;</span>
+<span class="pc bpc" id="L98" title="2 of 6 branches missed.">        return Objects.equals(owner, insurance.owner) &amp;&amp; Arrays.equals(additionalDrivers, insurance.additionalDrivers) &amp;&amp; Objects.equals(expirationDate, insurance.expirationDate);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L103">        int result = Objects.hash(owner, expirationDate);</span>
+<span class="nc" id="L104">        result = 31 * result + Arrays.hashCode(additionalDrivers);</span>
+<span class="nc" id="L105">        return result;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L110">        return &quot;Insurance{&quot; +</span>
+                &quot;owner=&quot; + owner +
+<span class="nc" id="L112">                &quot;, additionalDrivers=&quot; + Arrays.toString(additionalDrivers) +</span>
+                &quot;, expirationDate=&quot; + expirationDate +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
