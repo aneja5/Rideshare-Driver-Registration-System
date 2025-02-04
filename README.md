@@ -29,15 +29,18 @@ The following resources were consulted and used during the development of this p
 4. Design Patterns in Java: https://sourcemaking.com/design_patterns
 5. Stack Overflow: https://stackoverflow.com/
 
+### UML Diagram
+- ![uml.png](uml.png)
+
 ### Questions About the Software System
 1. Inheritance and Composition:
    - Inheritance: The ViolationType class has two subclasses, MovingViolation and NonMovingViolation, which inherit from the base class and provide specific types of violations.
     
-   - ![img.png](../codeSnippets/img.png)
+   - ![img.png](codeSnippets/img.png)
 
    - Composition: The ProspectiveDriver class has a composition relationship with Vehicle and DriverHistory classes, where a driver can have multiple vehicles and driving violations.
     
-   - ![img_1.png](../codeSnippets/img_1.png)
+   - ![img_1.png](codeSnippets/img_1.png)
 
 2. Interface or Abstract Class:
    - The project does not use any abstract classes or interface.
@@ -47,7 +50,7 @@ The following resources were consulted and used during the development of this p
 
     - Method Overloading: The Person class has two overloaded constructors: one that takes only the first and last name, and another that takes the first name, last name, and date of birth.
     
-    - ![img_3.png](../codeSnippets/img_3.png)
+    - ![img_3.png](codeSnippets/img_3.png)
 
 4. Encapsulation:
     - All classes in the project follow the principle of encapsulation by providing private fields and public getter methods to access and modify the object's state.
