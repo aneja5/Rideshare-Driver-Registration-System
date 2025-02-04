@@ -30,7 +30,7 @@ The following resources were consulted and used during the development of this p
 5. Stack Overflow: https://stackoverflow.com/
 
 ### UML Diagram
-- ![uml.png](uml.png)
+![uml.png](uml.png)
 
 ### Questions About the Software System
 1. Inheritance and Composition:
